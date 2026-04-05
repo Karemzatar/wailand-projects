@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Wailand Project Manager & CRM
 
 A smart, modern CRM + Project Access Platform controlling access entirely through unique Project Codes.
@@ -46,3 +47,6 @@ Users access their project portal by entering their 16-character securely-genera
 - **Admin System**: Allows deep-level management over created projects.
 - **Client Workspace**: Complete view for CRM details, logs, and simulated cross-communication.
 - **Responsive Layout**: Designed specifically for SaaS scale with high visual fidelity.
+=======
+# wailand-projects
+>>>>>>> 2eeaf8177d6fec42ee30aa88889ce29cc6a6830c
