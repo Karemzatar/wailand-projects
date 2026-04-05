@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wailand CRM & Access</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Start Login Screen -->
+        <div id="login-view" class="auth-container">
+            <div class="auth-box">
+                <h1 class="h1 mb-2">Access Portal</h1>
+                <p class="text-secondary mb-6">Enter your secure Project Code to continue.</p>
+                <form id="login-form" class="flex-col gap-4">
+                    <div style="text-align: left;">
+                        <label class="text-sm font-medium d-block mb-2">Project Code</label>
+                        <input type="text" id="project-code" placeholder="e.g. XyZ123!@#" required autocomplete="off">
+                    </div>
+                    <div id="login-error" class="error-banner hidden"></div>
+                    <button type="submit" id="login-btn" class="btn-primary w-100 mt-4">Enter Workspace</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Start Admin Dashboard -->
+        <div id="admin-view" class="dashboard-layout hidden">
+            <div class="sidebar">
+                <div style="margin-bottom: 2rem;">
+                    <h2 class="h2 text-primary">Wailand Admin</h2>
+                    <p class="text-xs">System Control Center</p>
+                </div>
+                <nav class="flex-col gap-2 flex-grow">
+                    <button class="nav-link active" data-tab="admin-projects">Projects</button>
+                    <button class="nav-link" data-tab="admin-emails">Email Threads</button>
+                </nav>
+                <button class="nav-link text-danger mt-auto" id="admin-logout">Sign Out</button>
+            </div>
+            
+            <div class="main-content">
+                <header class="flex justify-between items-center mb-6">
+                    <h1 class="h2" id="admin-header-title">Projects</h1>
+                    <button id="btn-create-project" class="btn-primary flex items-center gap-2">New Project</button>
+                </header>
+                
+                <div id="admin-projects" class="admin-tab-content">
+                    <div class="card p-0">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Project / Company</th>
+                                    <th>Access Code</th>
+                                    <th>Recipient</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="projects-table-body">
+                                <tr><td colspan="5" class="p-6 text-center text-secondary">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="admin-emails" class="admin-tab-content hidden">
+                    <div class="card p-0">
+                        <div class="p-6 border-bottom">
+                            <h3 class="h3">All Email Communications</h3>
+                            <p class="text-secondary">View all email threads across projects</p>
+                        </div>
+                        <div id="admin-emails-list" class="scroll-y p-0 h-600">
+                            <div class="p-6 text-center text-secondary">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Project Modal -->
+        <div id="project-modal" class="modal-overlay hidden">
+            <div class="card modal-content" style="max-width: 500px; width: 90%;">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="h2" id="modal-title">Create New Project</h2>
+                    <button id="btn-close-modal" class="btn-icon">&times;</button>
+                </div>
+                <form id="project-form" class="flex-col gap-4">
+                    <input type="hidden" id="proj-id">
+                    <div class="grid cols-2 gap-4">
+                        <div class="text-left">
+                            <label class="text-sm font-medium d-block mb-2">Recipient Name *</label>
+                            <input type="text" id="proj-recipientName" required>
+                        </div>
+                        <div class="text-left">
+                            <label class="text-sm font-medium d-block mb-2">Recipient Email *</label>
+                            <input type="email" id="proj-recipientEmail" required>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <label class="text-sm font-medium d-block mb-2">Company Name</label>
+                        <input type="text" id="proj-companyName">
+                    </div>
+                    <div class="grid cols-2 gap-4">
+                        <div class="text-left">
+                            <label class="text-sm font-medium d-block mb-2">Phone Number</label>
+                            <input type="tel" id="proj-phoneNumber">
+                        </div>
+                        <div class="text-left">
+                            <label class="text-sm font-medium d-block mb-2">Project Supervisor *</label>
+                            <input type="text" id="proj-projectSupervisor" required>
+                        </div>
+                    </div>
+                    <div class="grid cols-2 gap-4">
+                        <div class="text-left">
+                            <label class="text-sm font-medium d-block mb-2">Expiry Date *</label>
+                            <input type="date" id="proj-expiryDate" required>
+                        </div>
+                        <div class="text-left">
+                            <label class="text-sm font-medium d-block mb-2">Status</label>
+                            <select id="proj-status" class="form-select">
+                                <option value="Active">Active</option>
+                                <option value="Completed">Completed</option>
+                                <option value="On Hold">On Hold</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 mt-4">
+                        <button type="button" id="btn-cancel-modal" class="btn-secondary">Cancel</button>
+                        <button type="submit" id="btn-save-project" class="btn-primary">Save Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Start User Project Dashboard -->
+        <div id="project-view" class="hidden" style="background: var(--bg-color); min-height: 100vh;">
+            <header class="bg-surface header-bar">
+                <div class="container flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <h1 class="h3">Wailand Access</h1>
+                        <div class="divider-v"></div>
+                        <span id="header-recipient" class="text-secondary font-medium"></span>
+                    </div>
+                    <button id="project-logout" class="nav-link text-danger p-2">Exit Portal</button>
+                </div>
+            </header>
+
+            <main class="container py-8">
+                <div class="card bg-gradient-dark mb-8 p-6 text-white border-none">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <div class="text-xs text-slate-400 mb-2 uppercase tracking-wide">Active Project</div>
+                            <h2 class="h1 mb-2 text-white" id="proj-top-company">Project</h2>
+                            <p class="text-slate-300">Project Code: <span id="proj-top-code" class="mono-badge"></span></p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-slate-400 mb-1">Status</div>
+                            <div class="flex items-center gap-2 text-success font-medium">
+                                <span id="proj-top-status">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-nav mb-8">
+                    <button class="tab-btn active" data-tab="proj-overview">Overview</button>
+                    <button class="tab-btn" data-tab="proj-updates">Notes & Updates</button>
+                    <button class="tab-btn" data-tab="proj-emails">Email Threads</button>
+                </div>
+
+                <!-- User Project Overview -->
+                <div id="proj-overview" class="proj-tab-content flex gap-6">
+                    <div class="flex-col gap-6 flex-2">
+                        <div class="card p-6">
+                            <h3 class="h3 mb-4">Project Details</h3>
+                            <div class="flex-col gap-4">
+                                <div class="detail-row"><span class="text-secondary">Client Name</span><span id="dtl-client" class="font-medium"></span></div>
+                                <div class="detail-row"><span class="text-secondary">Company</span><span id="dtl-company" class="font-medium"></span></div>
+                                <div class="detail-row"><span class="text-secondary">Supervisor</span><span id="dtl-supervisor" class="font-medium"></span></div>
+                                <div class="detail-row"><span class="text-secondary">Start Date</span><span id="dtl-start" class="font-medium"></span></div>
+                                <div class="detail-row"><span class="text-secondary">Expected Delivery</span><span id="dtl-expected" class="font-medium"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-col gap-6 flex-1">
+                        <div class="card p-6">
+                            <h3 class="h3 mb-4">Recent Activity</h3>
+                            <div id="proj-activity-list" class="flex-col gap-4 text-sm">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Project Updates -->
+                <div id="proj-updates" class="proj-tab-content hidden card p-6">
+                    <h3 class="h3 mb-6">CRM Notes & Updates</h3>
+                    <div id="proj-notes-list" class="flex-col gap-4 mb-8"></div>
+                </div>
+
+                <!-- User Project Emails -->
+                <div id="proj-emails" class="proj-tab-content hidden flex gap-6 h-600">
+                    <div class="card p-0 flex-1 flex-col">
+                        <div class="flex justify-between items-center p-4 border-bottom">
+                            <h3 class="h3 m-0">Inbox</h3>
+                            <button id="btn-compose" class="btn-primary py-2 px-4 text-sm">Compose</button>
+                        </div>
+                        <div id="user-emails-list" class="overflow-y-auto flex-1"></div>
+                    </div>
+                    <div class="card p-0 flex-1 flex-col">
+                        <div id="user-email-detail" class="flex-col h-full hidden">
+                            <div class="p-4 border-bottom">
+                                <h3 class="h3 m-0 mb-2" id="msg-subject"></h3>
+                                <div class="text-sm text-secondary">
+                                    <span id="msg-sender"></span> • <span id="msg-date"></span>
+                                </div>
+                            </div>
+                            <div class="p-6 flex-1 overflow-y-auto">
+                                <p id="msg-body" style="white-space: pre-wrap; margin: 0; line-height: 1.6;"></p>
+                            </div>
+                        </div>
+                        <div id="user-email-empty" class="flex flex-col items-center justify-center p-8 h-full text-center">
+                            <p class="text-secondary">Select an email to view</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Compose Email Modal -->
+        <div id="compose-modal" class="modal-overlay hidden">
+            <div class="card modal-content" style="max-width: 600px; width: 90%;">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="h2">Compose Email</h2>
+                    <button id="btn-close-compose" class="btn-icon">&times;</button>
+                </div>
+                <form id="compose-form" class="flex-col gap-4">
+                    <div class="text-left">
+                        <label class="text-sm font-medium d-block mb-2">To *</label>
+                        <input type="email" id="compose-to" required>
+                    </div>
+                    <div class="text-left">
+                        <label class="text-sm font-medium d-block mb-2">Subject *</label>
+                        <input type="text" id="compose-subject" required>
+                    </div>
+                    <div class="text-left">
+                        <label class="text-sm font-medium d-block mb-2">Message *</label>
+                        <textarea id="compose-body" required rows="8" class="form-textarea"></textarea>
+                    </div>
+                    <div class="flex gap-2 mt-4">
+                        <button type="button" id="btn-cancel-compose" class="btn-secondary">Cancel</button>
+                        <button type="submit" id="btn-send-compose" class="btn-primary">Send Email</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
