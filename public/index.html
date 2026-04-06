@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wailand Projects</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- HEADER -->
+        <header>
+            <div class="logo">
+                <span class="logo-w">W</span>ailand <span class="logo-projects">Projects</span>
+            </div>
+            <nav id="header-nav" class="hidden">
+                <button id="logout-btn" class="btn btn-outline">Logout</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Toast Notifications -->
+            <div id="toast-container"></div>
+
+            <!-- LANDING VIEW -->
+            <section id="landing-view" class="view active">
+                <div class="glass-card login-box">
+                    <h1>Project Portal</h1>
+                    <p>Enter your 32-character project code or admin passcode to access your dashboard.</p>
+                    <form id="login-form">
+                        <div class="input-group">
+                            <input type="password" id="project-code-input" placeholder="Enter Project Code..." required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Access Project</button>
+                    </form>
+                    <div id="login-error" class="error-text hidden"></div>
+                </div>
+            </section>
+
+            <!-- ADMIN DASHBOARD VIEW -->
+            <section id="admin-view" class="view hidden">
+                <div class="admin-header">
+                    <h2>Admin Dashboard</h2>
+                    <button id="show-create-project-btn" class="btn btn-primary">+ Create New Project</button>
+                </div>
+
+                <div class="projects-grid" id="projects-container">
+                    <!-- Project Cards will be rendered here -->
+                </div>
+            </section>
+
+            <!-- PROJECT DETAILS VIEW -->
+            <section id="project-view" class="view hidden">
+                <div class="project-details-container glass-card">
+                    <button id="back-btn" class="btn btn-text">← Back to Login</button>
+                    <div class="project-header">
+                        <h2 id="pv-name">Project Name</h2>
+                        <span id="pv-status" class="status-badge">Status</span>
+                    </div>
+                    
+                    <div class="project-info-grid">
+                        <div class="info-carve">
+                            <h3>Client Info</h3>
+                            <p><strong>Name:</strong> <span id="pv-username"></span></p>
+                            <p><strong>Email:</strong> <span id="pv-usermail"></span></p>
+                            <p><strong>Number:</strong> <span id="pv-usernumber"></span></p>
+                        </div>
+                        <div class="info-carve">
+                            <h3>Project Details</h3>
+                            <p><strong>Deadline:</strong> <span id="pv-deadline"></span></p>
+                            <p><strong>Price:</strong> $<span id="pv-price"></span></p>
+                            <p><strong>Files/Resources:</strong> <span id="pv-files"></span></p>
+                            <p><strong>Project Code:</strong> <span id="pv-code" class="code-font"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="project-updates">
+                        <h3>Last Updates</h3>
+                        <div id="pv-updates-list" class="updates-timeline">
+                            <!-- Updates will go here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODALS -->
+    
+    <!-- Create / Edit Project Modal -->
+    <div id="project-modal" class="modal hidden">
+        <div class="modal-content glass-card">
+            <h2 id="modal-title">Create Project</h2>
+            <form id="project-form">
+                <input type="hidden" id="form-project-code">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Project Name</label>
+                        <input type="text" id="form-name" required>
+                    </div>
+                    <div class="input-group">
+                        <label>User Name</label>
+                        <input type="text" id="form-username">
+                    </div>
+                    <div class="input-group">
+                        <label>User Email</label>
+                        <input type="email" id="form-usermail">
+                    </div>
+                    <div class="input-group">
+                        <label>User Number</label>
+                        <input type="text" id="form-usernumber">
+                    </div>
+                    <div class="input-group">
+                        <label>Deadline</label>
+                        <input type="date" id="form-deadline">
+                    </div>
+                    <div class="input-group">
+                        <label>Price ($)</label>
+                        <input type="number" id="form-price" min="0" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label>Status</label>
+                        <select id="form-status">
+                            <option value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Review">Review</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Files / Links</label>
+                        <input type="text" id="form-files" placeholder="Comma separated URLs">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Add Update Log</label>
+                    <textarea id="form-new-update" rows="3" placeholder="Describe the latest updates..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="close-modal-btn" class="btn btn-outline">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

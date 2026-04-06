@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "Smart, modern CRM + Project Access Platform",
   "scripts": {
-    "install-all": "npm install && cd server && npm install",
-    "start": "cd server && node server.js"
+    "start": "node server/server.js"
   },
-  "devDependencies": {}
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
 }
