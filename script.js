@@ -20,7 +20,7 @@ async function checkCode() {
     return;
   }
 
-  const res = await fetch(`/project/${code}`);
+  const res = await fetch(`/project/${encodeURIComponent(code)}`);
   if (!res.ok) {
     document.getElementById("error").innerText = "Invalid Code";
     return;
@@ -131,7 +131,7 @@ async function submitProject() {
 
 // حذف
 async function deleteProject(code) {
-  await fetch(`/project/${code}`, { method: "DELETE" });
+  await fetch(`/project/${encodeURIComponent(code)}`, { method: "DELETE" });
   showAdmin();
 }
 
